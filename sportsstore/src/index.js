@@ -7,8 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/scss/bootstrap-grid.scss';
 import 'bootstrap/scss/bootstrap-reboot.scss';
 import 'bootstrap/scss/bootstrap.scss';
-import '@fortawesome/fontawesome-free/scss/regular.scss';
-import '@fortawesome/fontawesome-free/scss/fontawesome.scss';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

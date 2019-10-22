@@ -3,20 +3,29 @@ const jsonServer = require('json-server');
 const chokidar = require('chokidar');
 const cors = require('cors');
 
-const app = express();
-const router = undefined;
-function sumValues(values){return values.reduce((total,val) => total + val, 0);}
+const fileName = process.argv[2] || "./data.js";
+const port = process.argv[3] || 3500;
 
-function asyncAdd(values){
-    return new Promise (callback =>
-    setTimeout( () => {
-        let total = sumValues(values);
-        console.log(`Async Total: ${total}`);
-        callback(total);
-    },500)
-    )    
+let router = undefined;
+const app = express();
+
+const createServer = () => {
+    delete require.cache[require.resolve(fileName)];
+    setTimeout( ()=> {
+        router = jsonServer.router(fileName.endsWith('.js') ? require(fileName)() : fileName);
+    },100);
 }
 
-let values = [10,20,30,40,50];
-let total = asyncAdd(values);
-console.log(`Main Total: ${total}`);
+createServer(); 
+
+app.use(cors());
+app.use(jsonServer.bodyParser);
+app.use("/api", (req, resp, next) => router(req, resp, next));
+
+chokidar.watch(fileName).on("change", () => {
+    console.log("Reloading web service data...");
+    createServer();
+    console.log("Reloading web service data complete.");
+});
+
+app.listen(port, () => console.log(`Web service is running on port ${port}`));
