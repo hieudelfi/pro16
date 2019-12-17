@@ -5,8 +5,8 @@ export class CartSummary extends Component {
     getSummary =  () => {
         if ( this.props.cartItems > 0 ){
             return <span>
-                {this.props.cartItems} item(s),
-                ${this.props.cartPrice.toFixed(2)}
+                { this.props.cartItems } item(s),
+                ${ this.props.cartPrice.toFixed(2) }
             </span>
         } else {
             return <span>Your cart: (empty)</span>
